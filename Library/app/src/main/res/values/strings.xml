@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Library</string>
+    <string name="changeBook">Изменить запись</string>
+    <string name="_8942">⋮</string>
+    <string name="delete">Удалить</string>
+    <string name="newNotebook">Новая запись</string>
+    <string name="bookAuthor">Автор</string>
+    <string name="bookLabel">Название</string>
+    <string name="bookDescription">Описание</string>
+    <string name="loadImage">Загрузить изображение</string>
+    <string name="makeNewNote">Сделать запись</string>
+    <string name="aboutMainScreen">Библиотека</string>
+    <string name="SaveNote">Сохранить</string>
+    <string name="clear">Удалить записи</string>
+</resources>
