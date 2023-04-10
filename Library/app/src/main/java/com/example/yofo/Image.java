@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.yofo;
 
 public class Image {
     private String name;

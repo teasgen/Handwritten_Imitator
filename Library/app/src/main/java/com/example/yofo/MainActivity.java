@@ -1,10 +1,9 @@
-package com.example.library;
+package com.example.yofo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener{
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
@@ -22,9 +20,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        setContentView(R.layout.activity_main);
+        //Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         RecyclerView recyclerView = findViewById(R.id.review1);
         RecyclerViewLayoutManager
                 = new LinearLayoutManager(
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(MainActivity.this, bookDescriptionPage.class);
+        Intent intent = new Intent(MainActivity.this, WriteTextPage.class);
         intent.putExtra("position", String.valueOf(position));
         startActivity(intent);
     }

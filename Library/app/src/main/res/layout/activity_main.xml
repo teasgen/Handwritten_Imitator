@@ -28,6 +28,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="#A46F2D"
         android:text="@string/makeNewNote"
+        android:textColor="#000000"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

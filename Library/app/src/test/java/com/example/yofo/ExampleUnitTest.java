@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.yofo;
 
 import org.junit.Test;
 

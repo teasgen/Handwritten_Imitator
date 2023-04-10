@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Library</string>
+    <string name="app_name">YoFo</string>
     <string name="changeBook">Изменить запись</string>
     <string name="_8942">⋮</string>
     <string name="delete">Удалить</string>
@@ -9,7 +9,10 @@
     <string name="bookDescription">Описание</string>
     <string name="loadImage">Загрузить изображение</string>
     <string name="makeNewNote">Сделать запись</string>
-    <string name="aboutMainScreen">Библиотека</string>
+    <string name="aboutMainScreen">Мои шрифты</string>
     <string name="SaveNote">Сохранить</string>
     <string name="clear">Удалить записи</string>
+    <string name="userText">Введи свой текст здесь</string>
+    <string name="fontPermission"> \tВыбери фото рукописного шрифта в формате jpg/png\n\n\tЛюбые артефакты или посторонние символы ухудшат качество работы приложения
+    </string>
 </resources>

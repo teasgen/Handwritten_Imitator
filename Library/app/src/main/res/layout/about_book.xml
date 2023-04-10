@@ -8,71 +8,57 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageAbout"
-        android:layout_width="168dp"
-        android:layout_height="160dp"
+        android:layout_width="278dp"
+        android:layout_height="64dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.133"
+        app:layout_constraintVertical_bias="0.023"
         app:shapeAppearanceOverlay="@style/circleImageView"
         app:strokeColor="@android:color/darker_gray"
         app:strokeWidth="0dp"
         tools:ignore="ImageContrastCheck"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/labelAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageAbout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/authorAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.961"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bookAbout"
-        app:layout_constraintVertical_bias="0.96" />
-
-    <TextView
-        android:id="@+id/bookAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:padding="4dp"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.039"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageAbout"
-        app:layout_constraintVertical_bias="0.12" />
-
     <View
         android:id="@+id/view"
         android:layout_width="344dp"
         android:layout_height="11dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/line"
-        app:layout_constraintBottom_toTopOf="@+id/bookAbout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageAbout"
-        app:layout_constraintVertical_bias="0.583" />
+        app:layout_constraintTop_toBottomOf="@+id/imageAbout" />
+
+    <EditText
+        android:id="@+id/addText"
+        android:layout_width="347dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/userText"
+        android:inputType="textMultiLine"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/buttonGenerateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="16dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addText"
+        app:layout_constraintVertical_bias="0.36" />
 </androidx.constraintlayout.widget.ConstraintLayout>

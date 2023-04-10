@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.library'
+    namespace 'com.example.yofo'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.library"
+        applicationId "com.example.yofo"
         minSdk 30
         targetSdk 33
         versionCode 1
@@ -36,7 +36,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.12.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.5.0'
 }

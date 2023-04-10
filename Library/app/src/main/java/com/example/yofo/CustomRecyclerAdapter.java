@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.yofo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -43,7 +43,6 @@ public class CustomRecyclerAdapter extends
     public void onBindViewHolder(CustomRecyclerAdapter.ViewHolder holder, int
             position) {
         final Note note = listNotes.get(position);
-        holder.author.setText("@" + note.getAuthor());
         holder.label.setText(note.getTitle());
         Uri imgUri = Uri.parse("file://" + note.getImgPath());
         holder.image.setImageURI(null);
@@ -112,7 +111,7 @@ public class CustomRecyclerAdapter extends
                                                                        ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-        view.getLayoutParams().height = height / 4;
+        view.getLayoutParams().height = height / 5;
         return new ViewHolder(view, itemClickListener);
     }
     @Override
@@ -122,11 +121,10 @@ public class CustomRecyclerAdapter extends
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        TextView label, author, item_menu;
+        TextView label, item_menu;
         ViewHolder(View view, ItemClickListener itemClickListener){
             super(view);
             image = view.findViewById(R.id.imageView);
-            author = view.findViewById(R.id.author);
             label = view.findViewById(R.id.titleBook);
             item_menu = view.findViewById(R.id.dots);
 

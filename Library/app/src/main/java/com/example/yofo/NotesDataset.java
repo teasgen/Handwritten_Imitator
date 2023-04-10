@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.yofo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,10 +14,8 @@ public class NotesDataset extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Notes";
     private static final String TABLE_CONTACTS = "Notes";
     private static final String COLUMN_ID = "_id";
-    private static final String COLUMN_AUTHOR = "author";
     private static final String COLUMN_PATH = "imgPath";
     private static final String COLUMN_TITLE = "title";
-    private static final String COLUMN_DESCRIPTION = "description";
 
     public static synchronized NotesDataset getInstance(Context context) {
         if (sInstance == null) {
@@ -36,9 +34,7 @@ public class NotesDataset extends SQLiteOpenHelper {
                 + TABLE_CONTACTS + "(" + COLUMN_ID
                 + " INTEGER PRIMARY KEY,"
                 + COLUMN_PATH + " TEXT,"
-                + COLUMN_AUTHOR + " TEXT,"
-                + COLUMN_TITLE + " TEXT,"
-                + COLUMN_DESCRIPTION + " TEXT" + ")";
+                + COLUMN_TITLE + " TEXT" + ")";
         db.execSQL(createTable);
     }
 
@@ -57,10 +53,8 @@ public class NotesDataset extends SQLiteOpenHelper {
             do {
                 int id = Integer.parseInt(cursor.getString(0));
                 String path = cursor.getString(1);
-                String author = cursor.getString(2);
-                String title = cursor.getString(3);
-                String desc = cursor.getString(4);
-                storeNotes.add(new Note(id, path, author, title, desc));
+                String title = cursor.getString(2);
+                storeNotes.add(new Note(id, path, title));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -70,9 +64,7 @@ public class NotesDataset extends SQLiteOpenHelper {
     void addNote(Note note) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PATH, note.getImgPath());
-        values.put(COLUMN_AUTHOR, note.getAuthor());
         values.put(COLUMN_TITLE, note.getTitle());
-        values.put(COLUMN_DESCRIPTION, note.getDescription());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_CONTACTS, null, values);
     }
@@ -80,9 +72,7 @@ public class NotesDataset extends SQLiteOpenHelper {
     void updateNote(Note note) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PATH, note.getImgPath());
-        values.put(COLUMN_AUTHOR, note.getAuthor());
         values.put(COLUMN_TITLE, note.getTitle());
-        values.put(COLUMN_DESCRIPTION, note.getDescription());
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_CONTACTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(note.getId())});
     }
