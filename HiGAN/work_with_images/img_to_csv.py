@@ -18,9 +18,9 @@ import cv2
 # plt.imshow(df, cmap='gray')
 # plt.savefig('/home/vlad/workspace/course_work/HiGANplus/HiGAN+/data/wb.png', bbox_inches='tight', pad_inches=0)
 
-img = Image.open('../course_work/HiGANplus/HiGAN+/data/background_removed.png')
+img = Image.open('/home/vlad/workspace/Handwritten_Imitator/HiGAN/result.jpg')
 img_gray = img.convert('L')
-img = 0.75 * np.asarray(img_gray)
+img = np.asarray(img_gray)
 print(img.shape)
 img = cv2.resize(deepcopy(img), (img.shape[1] * 64 // img.shape[0], 64), interpolation=cv2.INTER_AREA)
 img = img.astype(int)

@@ -146,32 +146,32 @@ class AdversarialModel(BaseModel):
                                    max_length=self.opt.training.max_word_len)
         self.max_valid_image_width = self.opt.char_width * self.opt.training.max_word_len
         self.vae_mode = self.opt.training.vae_mode
-        self.collect_fn = get_collect_fn(self.opt.training.sort_input, sort_style=True)
-        self.train_loader = DataLoader(
-            get_dataset(opt.dataset, opt.training.dset_split,
-                        recogn_aug=True, wid_aug=True, process_style=True),
-            batch_size=opt.training.batch_size,
-            shuffle=True,
-            collate_fn=self.collect_fn,
-            num_workers=4,
-            drop_last=True
-        )
-
-        self.tst_loader = DataLoader(
-            get_dataset(opt.dataset, opt.valid.dset_split,
-                        recogn_aug=False, wid_aug=False, process_style=True),
-            batch_size=opt.training.eval_batch_size // 2,
-            shuffle=True,
-            collate_fn=self.collect_fn
-        )
-
-        self.tst_loader2 = DataLoader(
-            get_dataset(opt.dataset, opt.training.dset_split,
-                        recogn_aug=False, wid_aug=False, process_style=True),
-            batch_size=opt.training.eval_batch_size // 2,
-            shuffle=True,
-            collate_fn=self.collect_fn
-        )
+        # self.collect_fn = get_collect_fn(self.opt.training.sort_input, sort_style=True)
+        # self.train_loader = DataLoader(
+        #     get_dataset(opt.dataset, opt.training.dset_split,
+        #                 recogn_aug=True, wid_aug=True, process_style=True),
+        #     batch_size=opt.training.batch_size,
+        #     shuffle=True,
+        #     collate_fn=self.collect_fn,
+        #     num_workers=4,
+        #     drop_last=True
+        # )
+        #
+        # self.tst_loader = DataLoader(
+        #     get_dataset(opt.dataset, opt.valid.dset_split,
+        #                 recogn_aug=False, wid_aug=False, process_style=True),
+        #     batch_size=opt.training.eval_batch_size // 2,
+        #     shuffle=True,
+        #     collate_fn=self.collect_fn
+        # )
+        #
+        # self.tst_loader2 = DataLoader(
+        #     get_dataset(opt.dataset, opt.training.dset_split,
+        #                 recogn_aug=False, wid_aug=False, process_style=True),
+        #     batch_size=opt.training.eval_batch_size // 2,
+        #     shuffle=True,
+        #     collate_fn=self.collect_fn
+        # )
 
         self.models = None
 

@@ -31,7 +31,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class WriteTextPage extends AppCompatActivity {
-    private final String url="http://192.168.1.40:5000";
+    private final String url="http://192.168.1.44:5000";
     private static InputStream inputStream;
 
     public static InputStream getInputStream() {

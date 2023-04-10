@@ -21,6 +21,10 @@ def remove_background_from_image_with_text(img_path):
     mask = np.full(img.shape, 255, dtype=np.uint8)
     result = cv2.bitwise_not(new_image, mask)
     result = 255 - result
-    result = cv2.cvtColor(result, cv2.COLOR_RGB2GRAY)
+    result = 0.75 * np.array(cv2.cvtColor(result, cv2.COLOR_RGB2GRAY))
+
+    mask = np.any(result != 0, axis=1)
+    rows = np.where(mask == np.max(mask))
+    result = result[rows[0][0]: rows[0][-1] + 1]
     cv2.imwrite('result.jpg', result)
-    return np.array(result)
+    return result
