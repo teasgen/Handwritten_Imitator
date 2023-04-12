@@ -25,6 +25,8 @@ def remove_background_from_image_with_text(img_path):
 
     mask = np.any(result != 0, axis=1)
     rows = np.where(mask == np.max(mask))
-    result = result[rows[0][0]: rows[0][-1] + 1]
+    mask = np.any(result != 0, axis=0)
+    columns = np.where(mask == np.max(mask))
+    result = result[rows[0][0]: rows[0][-1] + 1, columns[0][0]: columns[0][-1] + 1]
     cv2.imwrite('result.jpg', result)
     return result
