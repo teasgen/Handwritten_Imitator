@@ -643,9 +643,9 @@ class AdversarialModel(BaseModel):
             gen_imgs = self.models.G(enc_styles, fake_lbs, fake_lb_lens)
             print(f'Generator has {sum(p.numel() for p in self.models.G.parameters())} parameters')
             print(f'Encoder has {sum(p.numel() for p in self.models.E.parameters())} parameters')
-            space_indexs = get_space_index(text)
-            for idx in space_indexs:
-                gen_imgs[:, :, idx * self.opt.char_width: (idx + 1) * self.opt.char_width] = -1
+            # space_indexs = get_space_index(text)
+            # for idx in space_indexs:
+            #     gen_imgs[:, :, idx * self.opt.char_width: (idx + 1) * self.opt.char_width] = -1
             gen_imgs = (1 - gen_imgs).squeeze().cpu().numpy() * 127
 
             # plt.figure()

@@ -31,13 +31,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class WriteTextPage extends AppCompatActivity {
-    private final String url="http://192.168.1.44:5000";
-    private static InputStream inputStream;
-
-    public static InputStream getInputStream() {
-        return inputStream;
-    }
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,35 +59,9 @@ public class WriteTextPage extends AppCompatActivity {
                 File file = new File(note.getImgPath());
                 EditText editText = findViewById(R.id.addText);
                 String text = String.valueOf(editText.getText());
-                RequestBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("text", text)
-                        .addFormDataPart("font", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
-                        .build();
-
-                Request request = new Request.Builder()
-                        .url(url + "/upload")
-                        .post(requestBody)
-                        .build();
-
-                OkHttpClient client = new OkHttpClient();
-                Response response = null;
-                try {
-                    response = client.newCall(request).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                byte[] imageData = new byte[0];
-                try {
-                    assert response != null;
-                    imageData = response.body().bytes();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                inputStream = new ByteArrayInputStream(imageData);
                 Intent intent = new Intent(this, GenerationPage.class);
+                intent.putExtra("text", text);
+                intent.putExtra("file", file);
                 startActivity(intent);
             }).start();
         });
