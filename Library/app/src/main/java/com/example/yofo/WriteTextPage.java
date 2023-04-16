@@ -2,6 +2,7 @@ package com.example.yofo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayInputStream;
@@ -23,14 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 public class WriteTextPage extends AppCompatActivity {
+    String PDFormat;
+    private final Object lock = new Object();
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +52,47 @@ public class WriteTextPage extends AppCompatActivity {
 
         Button buttonGenerate = findViewById(R.id.buttonGenerateText);
         buttonGenerate.setOnClickListener(v -> {
+            showAlertDialog();
             new Thread(() -> {
-                File file = new File(note.getImgPath());
-                EditText editText = findViewById(R.id.addText);
-                String text = String.valueOf(editText.getText());
-                Intent intent = new Intent(this, GenerationPage.class);
-                intent.putExtra("text", text);
-                intent.putExtra("file", file);
-                startActivity(intent);
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    File file = new File(note.getImgPath());
+                    EditText editText = findViewById(R.id.addText);
+                    String text = String.valueOf(editText.getText());
+                    Intent intent = new Intent(this, GenerationPage.class);
+                    intent.putExtra("text", text);
+                    intent.putExtra("file", file);
+                    intent.putExtra("format", PDFormat);
+                    startActivity(intent);
+                }
             }).start();
         });
+    }
+
+    private void setPDFormat(String format) {
+        synchronized (lock) {
+            PDFormat = format;
+            lock.notifyAll();
+        }
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        synchronized (lock) {
+            builder.setTitle("Choose the PDF format")
+                    .setNegativeButton("A4", (dialog, which) -> {
+                        setPDFormat("A4");
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton("A5", (dialog, which) -> {
+                        setPDFormat("A5");
+                        dialog.dismiss();
+                    }).create();
+            builder.show();
+        }
     }
 }

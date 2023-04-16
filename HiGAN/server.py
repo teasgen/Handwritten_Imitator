@@ -14,7 +14,6 @@ app = flask.Flask(__name__)
 def make_handwritten():
     text = request.values['text']
     font = request.files['font']
-    print(text)
 
     font_bytes = font.read()
     font_io = BytesIO(font_bytes)
