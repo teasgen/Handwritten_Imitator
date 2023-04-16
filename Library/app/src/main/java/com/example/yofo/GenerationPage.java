@@ -70,13 +70,39 @@ public class GenerationPage extends AppCompatActivity {
         assert document != null;
         PdfPage page = document.addNewPage(new PageSize(currentWidth, currentHeight));
         PdfCanvas canvas = new PdfCanvas(page);
+        int numberRows = 0;
 
-        for (int i = 0; i < text.length(); i += currentNumberOfSymbols) {
-            String currentText = text.substring(i, min(i + currentNumberOfSymbols, text.length()));
+        for (int i = 0; i < text.length();) {
+            int j = i;
+            int lastSpace = -1;
+            StringBuilder currentText = new StringBuilder();
+            while (j < text.length() && text.charAt(j) == ' ')
+                ++j;
+            while (j < text.length() && j - i < currentNumberOfSymbols) {
+                if (text.charAt(j) == ' ')
+                    lastSpace = j;
+                if (text.charAt(j) == '\n') {
+                    ++j;
+                    break;
+                }
+                currentText.append(text.charAt(j));
+                ++j;
+            }
+            if (j < text.length()
+                    && j - 1 >= 0
+                    && lastSpace != -1
+                    && Character.isLetter(text.charAt(j - 1))
+                    && Character.isLetter(currentText.charAt(currentText.length() - 1))) {
+                j = lastSpace;
+                currentText = new StringBuilder(text.substring(i, lastSpace));
+            }
+            i = j;
+
+            String finalCurrentText = currentText.toString();
             Thread sendGenerationRequest = new Thread(() -> {
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
-                        .addFormDataPart("text", currentText)
+                        .addFormDataPart("text", finalCurrentText)
                         .addFormDataPart("font", fontFile.getName(), RequestBody.create(MediaType.parse("image/jpeg"), fontFile))
                         .build();
 
@@ -110,13 +136,14 @@ public class GenerationPage extends AppCompatActivity {
                 e.printStackTrace();
             }
             Bitmap gotImage = BitmapFactory.decodeStream(inputStream);
-            int finalI = i;
+            int finalNumberRows = numberRows;
+            System.out.println(numberRows);
             Thread thread = new Thread(() -> {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 gotImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] bitmapData = stream.toByteArray();
                 ImageData imageData = ImageDataFactory.create(bitmapData);
-                canvas.addImage(imageData, 0, currentHeight - 64 * ((int)(finalI / currentNumberOfSymbols + 1)), gotImage.getWidth(), false);
+                canvas.addImage(imageData, 0, currentHeight - 64 * (finalNumberRows + 1), gotImage.getWidth(), false);
             });
             thread.start();
             try {
@@ -124,6 +151,7 @@ public class GenerationPage extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            ++numberRows;
             ImageView imageView = findViewById(R.id.generated);
             imageView.setImageBitmap(gotImage);
         }
