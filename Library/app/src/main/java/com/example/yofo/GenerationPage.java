@@ -55,6 +55,7 @@ public class GenerationPage extends AppCompatActivity {
         final String text = (String) previousIntent.getExtras().get("text");
         final File fontFile = (File) previousIntent.getExtras().get("file");
         final String PDFormat = (String) previousIntent.getExtras().get("format");
+        final String fileName = (String) previousIntent.getExtras().get("name");
 
         final int currentWidth = (PDFormat.equals("A4") ? a4Width200dpi : a5Width200dpi);
         final int currentHeight = (PDFormat.equals("A4") ? a4Height200dpi : a5Height200dpi);
@@ -62,7 +63,7 @@ public class GenerationPage extends AppCompatActivity {
 
         PdfDocument document = null;
         try {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "output.pdf");
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName + ".pdf");
             document = new PdfDocument(new PdfWriter(file.getAbsolutePath()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();

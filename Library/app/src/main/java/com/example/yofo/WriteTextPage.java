@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import java.util.Objects;
 public class WriteTextPage extends AppCompatActivity {
     String PDFormat;
     private final Object lock = new Object();
+    EditText alertInput;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class WriteTextPage extends AppCompatActivity {
                     intent.putExtra("text", text);
                     intent.putExtra("file", file);
                     intent.putExtra("format", PDFormat);
+                    intent.putExtra("name", alertInput.getText().toString());
                     startActivity(intent);
                 }
             }).start();
@@ -83,7 +87,10 @@ public class WriteTextPage extends AppCompatActivity {
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         synchronized (lock) {
+            alertInput = new EditText(this);
+            alertInput.setHint("Write file name");
             builder.setTitle("Choose the PDF format")
+                    .setView(alertInput)
                     .setNegativeButton("A4", (dialog, which) -> {
                         setPDFormat("A4");
                         dialog.dismiss();
