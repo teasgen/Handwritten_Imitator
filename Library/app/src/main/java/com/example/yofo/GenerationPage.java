@@ -1,18 +1,19 @@
 package com.example.yofo;
 
-import static java.lang.Math.min;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.barteksc.pdfviewer.listener.OnRenderListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -35,6 +36,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import com.github.barteksc.pdfviewer.PDFView;
+
 public class GenerationPage extends AppCompatActivity {
     private static final String url = "http://192.168.1.44:5000";
     private static final int a5Width200dpi = 1169;
@@ -55,7 +58,7 @@ public class GenerationPage extends AppCompatActivity {
         final String text = (String) previousIntent.getExtras().get("text");
         final File fontFile = (File) previousIntent.getExtras().get("file");
         final String PDFormat = (String) previousIntent.getExtras().get("format");
-        final String fileName = (String) previousIntent.getExtras().get("name");
+        final String fileName = previousIntent.getExtras().get("name") + ".pdf";
 
         final int currentWidth = (PDFormat.equals("A4") ? a4Width200dpi : a5Width200dpi);
         final int currentHeight = (PDFormat.equals("A4") ? a4Height200dpi : a5Height200dpi);
@@ -63,7 +66,7 @@ public class GenerationPage extends AppCompatActivity {
 
         PdfDocument document = null;
         try {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName + ".pdf");
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName);
             document = new PdfDocument(new PdfWriter(file.getAbsolutePath()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -153,8 +156,13 @@ public class GenerationPage extends AppCompatActivity {
                 e.printStackTrace();
             }
             ++numberRows;
-            ImageView imageView = findViewById(R.id.generated);
-            imageView.setImageBitmap(gotImage);
+            TextView fileNameTextView = findViewById(R.id.fileName);
+            fileNameTextView.setText(fileName);
+            PDFView pdfView = findViewById(R.id.pdfView);
+            pdfView.setMinimumHeight((int) (1.4141 * pdfView.getWidth()));
+            pdfView.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName))
+                    .fitEachPage(true)
+                    .load();
         }
         document.close();
     }
