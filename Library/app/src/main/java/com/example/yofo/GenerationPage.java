@@ -5,8 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -165,5 +168,15 @@ public class GenerationPage extends AppCompatActivity {
                     .load();
         }
         document.close();
+
+        ImageButton remove = findViewById(R.id.removeFile);
+        remove.setOnClickListener(v -> {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName);
+            if (file.delete()) {
+                Toast.makeText(this, "Successfully removed!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

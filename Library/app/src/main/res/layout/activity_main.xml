@@ -21,15 +21,13 @@
         app:layout_constraintVertical_bias="0.455"
         tools:listitem="@layout/item" />
 
-    <Button
+    <ImageButton
         android:id="@+id/makeNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="#A46F2D"
-        android:text="@string/makeNewNote"
-        android:textColor="#000000"
-        android:textSize="12sp"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/white_plus_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.937"

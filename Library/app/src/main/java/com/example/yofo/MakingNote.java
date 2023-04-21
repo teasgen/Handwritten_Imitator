@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -27,7 +25,7 @@ public class MakingNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_creating);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        Button pageUploading = findViewById(R.id.uploadImage);
+        ImageButton pageUploading = findViewById(R.id.uploadImage);
         storagePermission = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
         pageUploading.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK,
@@ -35,7 +33,7 @@ public class MakingNote extends AppCompatActivity {
             startActivityForResult(intent, IMAGEPICK_GALLERY_REQUEST);
         });
         mDatabase = NotesDataset.getInstance(this);
-        Button save = findViewById(R.id.saveButton);
+        ImageButton save = findViewById(R.id.saveButton);
         EditText title = findViewById(R.id.editBookLabel);
 
         Intent previousIntent = getIntent();

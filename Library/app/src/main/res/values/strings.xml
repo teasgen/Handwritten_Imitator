@@ -15,4 +15,5 @@
     <string name="userText">Введи свой текст здесь</string>
     <string name="fontPermission"> \tВыбери фото рукописного шрифта в формате jpg/png\n\n\tЛюбые артефакты или посторонние символы ухудшат качество работы приложения
     </string>
+    <string name="u2713">✓</string>
 </resources>

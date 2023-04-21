@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             Toast.makeText(this, "There is no note in the database. Start adding now", Toast.LENGTH_LONG).show();
         }
 
-        Button pageUploading = findViewById(R.id.makeNote);
+        ImageButton pageUploading = findViewById(R.id.makeNote);
         pageUploading.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this,
                     MakingNote.class);

@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,7 +54,7 @@ public class WriteTextPage extends AppCompatActivity {
 
         imageView.setImageBitmap(bitmap);
 
-        Button buttonGenerate = findViewById(R.id.buttonGenerateText);
+        ImageButton buttonGenerate = findViewById(R.id.buttonGenerateText);
         buttonGenerate.setOnClickListener(v -> {
             showAlertDialog();
             new Thread(() -> {
