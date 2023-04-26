@@ -14,13 +14,12 @@ app = flask.Flask(__name__)
 def make_handwritten():
     text = request.values['text']
     font = request.files['font']
+    print(text)
 
     font_bytes = font.read()
     font_io = BytesIO(font_bytes)
 
     font = Image.open(font_io).convert("L")
-    # font_np = np.asarray(font)
-    # print(font_np.shape)
     font.save("got.jpg")
     font_removed_background = remove_background_from_image_with_text("got.jpg")
     result = Image.fromarray(font_removed_background).convert('RGB')

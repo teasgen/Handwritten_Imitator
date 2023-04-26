@@ -4,9 +4,6 @@ import numpy as np
 
 
 def remove_background_from_image_with_text(img_path):
-    # img_path = "./data/background_removed.png"
-    # res = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_RGB2GRAY)
-    # return np.array(res)
     img = cv2.imread(img_path)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

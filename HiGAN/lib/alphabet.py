@@ -1,16 +1,15 @@
 import unicodedata
 import torch
-import numpy as np
 
-#-\'.ü!"#%&()*+,/:;?
+# -\'.ü!"#%&()*+,/:;?
 Alphabets = {
-    #'!#&():;?*%'
-    'all': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',# n_class: 80
-    'iam_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?', # n_class: 80
-    'iam_line': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?', # n_class: 80
-    'cvl_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?', # n_class: 80
+    # '!#&():;?*%'
+    'all': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80
+    'iam_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80
+    'iam_line': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80
+    'cvl_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80
     # 'cvl_word': '` ABDEFGHILNPRSTUVWYZabcdefghiklmnopqrstuvwxyz\'-_159', # n_class: 52
-    'rimes_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%\'-/Éàâçèéêëîïôùû' # n_class: 81
+    'rimes_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%\'-/Éàâçèéêëîïôùû'  # n_class: 81
 }
 
 
@@ -75,78 +74,6 @@ class strLabelConverter(object):
             labels = pad_labels
 
         return labels, lengths
-
-    def decode(self, t, length=None, raw=False):
-        """Decode encoded texts back into strs.
-        Args:
-            torch.IntTensor [length_0 + length_1 + ... length_{n - 1}]: encoded texts.
-            torch.IntTensor [n]: length of each text.
-        Raises:
-            AssertionError: when the texts and its length does not match.
-        Returns:
-            text (str or list of str): texts to convert.
-        """
-        def nonzero_count(x):
-            return len(x.nonzero(as_tuple=False))
-
-        if isinstance(t, list):
-            t = torch.IntTensor(t)
-            length = torch.IntTensor([len(t)])
-        elif length is None:
-            length = torch.IntTensor([nonzero_count(t)])
-
-        if length.numel() == 1:
-            length = length[0]
-            assert nonzero_count(t) == length, "{} text with length: {} does not match declared length: {}".\
-                                                format(t, nonzero_count(t), length)
-            if raw:
-                return ''.join([self.alphabet[i] for i in t])
-            else:
-                char_list = []
-                if t.dim() == 2:
-                    t = t[0]
-                for i in range(length):
-                    if t[i] != 0 and (not (i > 0 and t[i - 1] == t[i])):
-                        char_list.append(self.alphabet[t[i]])
-                return ''.join(char_list)
-        else:
-            # batch mode
-            assert nonzero_count(t) == length.sum(), "texts with length: {} does not match declared length: {}".\
-                                                      format(nonzero_count(t), length.sum())
-            texts = []
-            index = 0
-            for i in range(length.numel()):
-                l = length[i]
-                texts.append(
-                    self.decode(
-                        t[i, :l], torch.IntTensor([l]), raw=raw))
-                index += l
-            return texts
-
-
-def get_true_alphabet(name):
-    tag = '_'.join(name.split('_')[:2])
-    return Alphabets[tag]
-
-
-def get_lexicon(path, true_alphabet, max_length=20, ignore_case=True):
-    words = []
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            for line in f.readlines():
-                line = line.strip()
-                if len(line) < 2:
-                    continue
-
-                word = ''.join(ch for ch in line if ch in true_alphabet)
-                if len(word) != len(line) or len(word) >= max_length:
-                    continue
-                if ignore_case:
-                    word = word.lower()
-                words.append(word)
-    except FileNotFoundError as e:
-        print(e)
-    return words
 
 
 def word_capitalize(word):
