@@ -1,7 +1,22 @@
 import argparse
-
-from lib.utils import yaml2config
+import yaml
+import munch
 from networks.model import AdversarialModel
+
+
+def yaml2config(yml_path):
+    with open(yml_path) as fp:
+        json = yaml.load(fp, Loader=yaml.FullLoader)
+
+    def to_munch(json):
+        for key, val in json.items():
+            if isinstance(val, dict):
+                json[key] = to_munch(val)
+        return munch.Munch(json)
+
+    cfg = to_munch(json)
+    return cfg
+
 
 model = None
 
