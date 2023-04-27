@@ -1,5 +1,5 @@
 import argparse
-from networks.model import AdversarialModel
+from networks.model import Model
 
 model = None
 
@@ -7,11 +7,6 @@ model = None
 def init_model():
     global model
     parser = argparse.ArgumentParser(description="config")
-    parser.add_argument(
-        "--config",
-        default="configs/gan_iam.yml",
-    )
-
     parser.add_argument(
         "--ckpt",
         default="./pretrained/deploy_HiGAN+.pth",
@@ -23,7 +18,7 @@ def init_model():
     )
 
     args = parser.parse_args()
-    model = AdversarialModel(args.config)
+    model = Model()
     model.load(args.ckpt, 'cuda:0')
 
 

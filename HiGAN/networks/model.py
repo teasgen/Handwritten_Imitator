@@ -10,14 +10,21 @@ from networks.module import StyleEncoder, StyleBackbone
 from lib.alphabet import strLabelConverter, Alphabets
 
 
-class BaseModel(object):
-    def __init__(self, opt, log_root='./'):
-        self.opt = opt
+class Model(object):
+    def __init__(self):
         self.device = torch.device('cuda:0')
-        self.models = Munch()
         alphabet_key = 'all'
         self.alphabet = Alphabets[alphabet_key]
         self.label_converter = strLabelConverter(alphabet_key)
+        generator = Generator().to(self.device)
+        style_backbone = StyleBackbone().to(self.device)
+        style_encoder = StyleEncoder().to(self.device)
+
+        self.models = Munch(
+            G=generator,
+            E=style_encoder,
+            B=style_backbone,
+        )
 
     def load(self, ckpt, map_location=None, modules=None):
         if modules is None:
@@ -43,22 +50,6 @@ class BaseModel(object):
 
         ckpt['Epoch'] = 0 if 'Epoch' not in ckpt else ckpt['Epoch']
         return ckpt['Epoch']
-
-
-class AdversarialModel(BaseModel):
-    def __init__(self, opt, log_root='./'):
-        super(AdversarialModel, self).__init__(opt, log_root)
-        device = self.device
-        # generator = Generator(**opt.GenModel).to(device)
-        generator = Generator().to(device)
-        style_backbone = StyleBackbone().to(device)
-        style_encoder = StyleEncoder().to(device)
-
-        self.models = Munch(
-            G=generator,
-            E=style_encoder,
-            B=style_backbone,
-        )
 
     def eval_text_custom_image(self, org_img, text):
         for model in self.models.values():
