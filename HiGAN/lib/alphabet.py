@@ -1,9 +1,6 @@
-import unicodedata
 import torch
 
-# -\'.ü!"#%&()*+,/:;?
 Alphabets = {
-    # '!#&():;?*%'
     'all': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80
     'iam_word': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80
     'iam_line': '` ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'-"/,.+_!#&():;?',  # n_class: 80

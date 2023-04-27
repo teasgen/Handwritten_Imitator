@@ -26,13 +26,12 @@ def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
 
 class Generator(nn.Module):
     def __init__(self, G_ch=64, style_dim=32, embed_dim=120,
-                 bottom_width=4, bottom_height=4, resolution=128,
-                 G_kernel_size=3, G_attn='64', n_class=1000,
+                 bottom_width=4, bottom_height=4, resolution=64,
+                 G_kernel_size=3, G_attn='0', n_class=80,
                  num_G_SVs=1, num_G_SV_itrs=1,
-                 cross_replica=False, mybn=False,
                  G_activation=nn.ReLU(inplace=False),
-                 BN_eps=1e-5, SN_eps=1e-12, G_fp16=False,
-                 init='ortho', G_param='SN', norm_style='bn', bn_linear='embed', input_nc=3,
+                 BN_eps=1.e-05, SN_eps=1.e-08, G_fp16=False,
+                 init='N02', G_param='SN', norm_style='bn', bn_linear='SN', input_nc=1,
                  embed_pad_idx=0, embed_max_norm=1.0
                  ):
         super(Generator, self).__init__()
@@ -56,10 +55,6 @@ class Generator(nn.Module):
         self.attention = G_attn
         # number of classes, for use in categorical conditional generation
         self.n_classes = n_class
-        # Cross replica batchnorm?
-        self.cross_replica = cross_replica
-        # Use my batchnorm?
-        self.mybn = mybn
         # nonlinearity for residual blocks
         self.activation = G_activation
         # Initialization style
@@ -104,8 +99,6 @@ class Generator(nn.Module):
 
         self.which_bn = functools.partial(layers.ccbn,
                                           which_linear=bn_linear,
-                                          cross_replica=self.cross_replica,
-                                          mybn=self.mybn,
                                           input_size=self.z_chunk_size,
                                           norm_style=self.norm_style,
                                           eps=self.BN_eps)
@@ -141,9 +134,7 @@ class Generator(nn.Module):
 
         # output layer: batchnorm-relu-conv.
         # Consider using a non-spectral conv here
-        self.output_layer = nn.Sequential(layers.bn(self.arch['out_channels'][-1],
-                                                    cross_replica=self.cross_replica,
-                                                    mybn=self.mybn),
+        self.output_layer = nn.Sequential(layers.bn(self.arch['out_channels'][-1]),
                                           self.activation,
                                           self.which_conv(self.arch['out_channels'][-1], input_nc))
 
