@@ -14,7 +14,6 @@ class Model(object):
     def __init__(self):
         self.device = torch.device('cuda:0')
         alphabet_key = 'all'
-        self.alphabet = Alphabets[alphabet_key]
         self.label_converter = strLabelConverter(alphabet_key)
         generator = Generator().to(self.device)
         style_backbone = StyleBackbone().to(self.device)

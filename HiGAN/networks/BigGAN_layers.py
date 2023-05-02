@@ -166,7 +166,6 @@ Attention = SelfAttention
 class ccbn(nn.Module):
     def __init__(self, output_size, input_size, which_linear, eps=1e-5, momentum=0.1, norm_style='bn'):
         super(ccbn, self).__init__()
-        self.output_size, self.input_size = output_size, input_size
         # Prepare gain and bias layers
         self.gain = which_linear(input_size, output_size)
         self.bias = which_linear(input_size, output_size)
@@ -194,7 +193,6 @@ class ccbn(nn.Module):
 class bn(nn.Module):
     def __init__(self, output_size, eps=1e-5, momentum=0.1):
         super(bn, self).__init__()
-        self.output_size = output_size
         # Prepare gain and bias layers
         self.gain = P(torch.ones(output_size), requires_grad=True)
         self.bias = P(torch.zeros(output_size), requires_grad=True)
@@ -222,20 +220,18 @@ class GBlock(nn.Module):
                  upsample=None):
         super(GBlock, self).__init__()
 
-        self.in_channels, self.out_channels = in_channels, out_channels
-        self.which_conv1, self.which_conv2, self.which_bn = which_conv1, which_conv2, which_bn
         self.activation = activation
         self.upsample = upsample
         # Conv layers
-        self.conv1 = self.which_conv1(self.in_channels, self.out_channels)
-        self.conv2 = self.which_conv2(self.out_channels, self.out_channels)
+        self.conv1 = which_conv1(in_channels, out_channels)
+        self.conv2 = which_conv2(out_channels, out_channels)
         self.learnable_sc = in_channels != out_channels or upsample
         if self.learnable_sc:
-            self.conv_sc = self.which_conv1(in_channels, out_channels,
+            self.conv_sc = which_conv1(in_channels, out_channels,
                                             kernel_size=1, padding=0)
         # Batchnorm layers
-        self.bn1 = self.which_bn(in_channels)
-        self.bn2 = self.which_bn(out_channels)
+        self.bn1 = which_bn(in_channels)
+        self.bn2 = which_bn(out_channels)
         # upsample layers
         self.upsample = upsample
 

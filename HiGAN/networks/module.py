@@ -1,13 +1,12 @@
 import torch
 from torch import nn
 from networks.block import Conv2dBlock, ActFirstResBlock
-from networks.utils import _len2mask, init_weights
+from networks.utils import _len2mask
 
 
 class StyleBackbone(nn.Module):
     def __init__(self, resolution=16, max_dim=256, in_channel=1, init='N02', dropout=0.0, norm='bn'):
         super(StyleBackbone, self).__init__()
-        self.reduce_len_scale = 16
         nf = resolution
         cnn_f = [nn.ConstantPad2d(2, -1),
                  Conv2dBlock(in_channel, nf, 5, 2, 0,
@@ -45,8 +44,6 @@ class StyleBackbone(nn.Module):
                         norm=norm,
                         activation='relu')
         )
-        if init != 'none':
-            init_weights(self, init)
 
     def forward(self, x, ret_feats=False):
         with torch.no_grad():
@@ -62,7 +59,7 @@ class StyleBackbone(nn.Module):
 
 
 class StyleEncoder(nn.Module):
-    def __init__(self, style_dim=32, in_dim=256, init='N02'):
+    def __init__(self, style_dim=32, in_dim=256):
         super(StyleEncoder, self).__init__()
         self.style_dim = style_dim
 
@@ -78,12 +75,10 @@ class StyleEncoder(nn.Module):
 
         self.mu = nn.Linear(in_dim, style_dim)
         self.logvar = nn.Linear(in_dim, style_dim)
-        if init != 'none':
-            init_weights(self, init)
 
-    def forward(self, img, img_len, cnn_backbone=None, ret_feats=False, vae_mode=False):
+    def forward(self, img, img_len, cnn_backbone=None, ret_feats=False):
         feat, all_feats = cnn_backbone(img, ret_feats)
-        img_len = img_len // cnn_backbone.reduce_len_scale
+        img_len = img_len // 16
         img_len_mask = _len2mask(img_len, feat.size(-1)).unsqueeze(1).float().detach()
         style = (feat * img_len_mask).sum(dim=-1) / (img_len.unsqueeze(1).float() + 1e-8)
         style = self.linear_style(style)
