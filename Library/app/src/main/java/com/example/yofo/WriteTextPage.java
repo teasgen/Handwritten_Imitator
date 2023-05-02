@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,7 +57,13 @@ public class WriteTextPage extends AppCompatActivity {
 
         ImageButton buttonGenerate = findViewById(R.id.buttonGenerateText);
         buttonGenerate.setOnClickListener(v -> {
-            showAlertDialog();
+            EditText editText = findViewById(R.id.addText);
+            final String text = String.valueOf(editText.getText());
+            if (text.matches("[a-zA-Z ,.\n]+")) {
+                showAlertDialog();
+            } else {
+                Toast.makeText(this, "Use only latin characters, dots and commas!", Toast.LENGTH_SHORT).show();
+            }
             new Thread(() -> {
                 synchronized (lock) {
                     try {
@@ -65,8 +72,6 @@ public class WriteTextPage extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     File file = new File(note.getImgPath());
-                    EditText editText = findViewById(R.id.addText);
-                    String text = String.valueOf(editText.getText());
                     Intent intent = new Intent(this, GenerationPage.class);
                     intent.putExtra("text", text);
                     intent.putExtra("file", file);

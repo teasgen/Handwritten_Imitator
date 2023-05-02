@@ -174,9 +174,12 @@ public class GenerationPage extends AppCompatActivity {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName);
             if (file.delete()) {
                 Toast.makeText(this, "Successfully removed!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 }
