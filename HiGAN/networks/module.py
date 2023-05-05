@@ -32,12 +32,6 @@ class StyleBackbone(nn.Module):
                 cnn_f += [nn.ZeroPad2d((1, 1, 0, 0))]
             df = min([df_out, max_dim])
         self.cnn_backbone = nn.Sequential(*cnn_f)
-        self.layer_name_mapping = {
-            '9': "feat2",
-            '13': "feat3",
-            '16': "feat4",
-        }
-
         self.cnn_ctc = nn.Sequential(
             nn.ReLU(),
             Conv2dBlock(df, df, 3, 1, 0,
@@ -45,17 +39,11 @@ class StyleBackbone(nn.Module):
                         activation='relu')
         )
 
-    def forward(self, x, ret_feats=False):
+    def forward(self, x):
         with torch.no_grad():
-            feats = []
-            for name, layer in self.cnn_backbone._modules.items():
-                x = layer(x)
-                if ret_feats and name in self.layer_name_mapping:
-                    feats.append(x)
-
+            x = self.cnn_backbone(x)
             out = self.cnn_ctc(x).squeeze(-2)
-
-            return out, feats
+            return out
 
 
 class StyleEncoder(nn.Module):
@@ -76,8 +64,8 @@ class StyleEncoder(nn.Module):
         self.mu = nn.Linear(in_dim, style_dim)
         self.logvar = nn.Linear(in_dim, style_dim)
 
-    def forward(self, img, img_len, cnn_backbone=None, ret_feats=False):
-        feat, all_feats = cnn_backbone(img, ret_feats)
+    def forward(self, img, img_len, cnn_backbone=None):
+        feat = cnn_backbone(img)
         img_len = img_len // 16
         img_len_mask = _len2mask(img_len, feat.size(-1)).unsqueeze(1).float().detach()
         style = (feat * img_len_mask).sum(dim=-1) / (img_len.unsqueeze(1).float() + 1e-8)
@@ -86,7 +74,4 @@ class StyleEncoder(nn.Module):
 
         style = mu
 
-        if ret_feats:
-            return style, all_feats
-        else:
-            return style
+        return style

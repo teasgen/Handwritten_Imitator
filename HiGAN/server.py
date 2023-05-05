@@ -1,6 +1,5 @@
 from io import BytesIO
 import flask
-import numpy as np
 from flask import request, send_file
 from PIL import Image
 

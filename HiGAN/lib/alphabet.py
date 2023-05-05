@@ -42,31 +42,8 @@ class strLabelConverter(object):
         if len(text) == 1:
             text = text[0]
 
-        if isinstance(text, str):
-            text = [
-                self.dict[char.lower() if self._ignore_case else char]
-                for char in text
-            ]
-            return text
-
-        length = []
-        result = []
-        results = []
-        for item in text:
-            # item = item.decode('utf-8', 'strict')
-            length.append(len(item))
-            for char in item:
-                index = self.dict[char]
-                result.append(index)
-            results.append(result)
-            result = []
-
-        labels = torch.nn.utils.rnn.pad_sequence([torch.LongTensor(text) for text in results], batch_first=True)
-        lengths = torch.IntTensor(length)
-
-        if max_len is not None and max_len > labels.size(-1):
-            pad_labels = torch.zeros((labels.size(0), max_len)).long()
-            pad_labels[:, :labels.size(-1)] = labels
-            labels = pad_labels
-
-        return labels, lengths
+        text = [
+            self.dict[char.lower() if self._ignore_case else char]
+            for char in text
+        ]
+        return text
