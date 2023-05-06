@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/text"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <EditText
@@ -12,6 +13,9 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/bookLabel"
+        android:textColorHint="#808080"
+        android:backgroundTint="#808080"
+        android:textColor="@color/black"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/uploadImage"
@@ -27,6 +31,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
         android:text="@string/newNotebook"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +67,7 @@
         android:layout_width="332dp"
         android:layout_height="123dp"
         android:text="@string/fontPermission"
+        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/uploadImage"
         app:layout_constraintEnd_toEndOf="parent"
