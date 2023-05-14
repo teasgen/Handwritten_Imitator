@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:background="@color/white"
@@ -11,19 +12,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints=""
+        android:backgroundTint="#808080"
         android:ems="10"
         android:hint="@string/bookLabel"
-        android:textColorHint="#808080"
-        android:backgroundTint="#808080"
-        android:textColor="@color/black"
         android:inputType="textPersonName"
         android:minHeight="48dp"
+        android:textColor="@color/black"
+        android:textColorHint="#808080"
         app:layout_constraintBottom_toTopOf="@+id/uploadImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.079"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintVertical_bias="0.202" />
 
     <TextView
         android:id="@+id/textView"
@@ -44,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:background="@drawable/button_circle"
+        android:contentDescription="@string/loadImage"
         android:src="@drawable/add_image_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_circle"
+        android:contentDescription="@string/SaveNote"
         android:src="@drawable/white_done_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,15 +67,27 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="332dp"
-        android:layout_height="123dp"
+        android:layout_width="344dp"
+        android:layout_height="161dp"
         android:text="@string/fontPermission"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/uploadImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintHorizontal_bias="0.238"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editBookLabel"
-        app:layout_constraintVertical_bias="0.131" />
+        app:layout_constraintVertical_bias="0.119" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="298dp"
+        android:layout_height="108dp"
+        app:layout_constraintBottom_toTopOf="@+id/uploadImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.197"
+        app:srcCompat="@drawable/got" />
 </androidx.constraintlayout.widget.ConstraintLayout>

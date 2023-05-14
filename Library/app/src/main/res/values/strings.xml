@@ -13,7 +13,7 @@
     <string name="SaveNote">Сохранить</string>
     <string name="clear">Удалить записи</string>
     <string name="userText">Введи свой текст здесь</string>
-    <string name="fontPermission"> \tВыбери фото рукописного шрифта в формате jpg/png\n\n\tЛюбые артефакты или посторонние символы ухудшат качество работы приложения
+    <string name="fontPermission"> \tВыбери фото рукописного шрифта в формате JPEG\n\n\tЛюбые артефакты или посторонние символы ухудшат качество работы приложения\n\n\tПример фото:
     </string>
     <string name="u2713">✓</string>
 </resources>
