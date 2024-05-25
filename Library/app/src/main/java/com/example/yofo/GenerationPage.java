@@ -73,96 +73,66 @@ public class GenerationPage extends AppCompatActivity {
         assert document != null;
         PdfPage page = document.addNewPage(new PageSize(currentWidth, currentHeight));
         PdfCanvas canvas = new PdfCanvas(page);
-        int numberRows = 0;
 
-        for (int i = 0; i < text.length();) {
-            int j = i;
-            int lastSpace = -1;
-            StringBuilder currentText = new StringBuilder();
-            while (j < text.length() && text.charAt(j) == ' ')
-                ++j;
-            while (j < text.length() && j - i < currentNumberOfSymbols) {
-                if (text.charAt(j) == ' ')
-                    lastSpace = j;
-                if (text.charAt(j) == '\n') {
-                    ++j;
-                    break;
-                }
-                currentText.append(text.charAt(j));
-                ++j;
-            }
-            if (j < text.length()
-                    && j - 1 >= 0
-                    && lastSpace != -1
-                    && Character.isLetter(text.charAt(j - 1))
-                    && Character.isLetter(currentText.charAt(currentText.length() - 1))) {
-                j = lastSpace;
-                currentText = new StringBuilder(text.substring(i, lastSpace));
-            }
-            i = j;
+        Thread sendGenerationRequest = new Thread(() -> {
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("text", text)
+                    .addFormDataPart("number_of_symbols", String.valueOf(currentNumberOfSymbols))
+                    .addFormDataPart("font", fontFile.getName(), RequestBody.create(MediaType.parse("image/jpeg"), fontFile))
+                    .build();
 
-            String finalCurrentText = currentText.toString();
-            Thread sendGenerationRequest = new Thread(() -> {
-                RequestBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("text", finalCurrentText)
-                        .addFormDataPart("font", fontFile.getName(), RequestBody.create(MediaType.parse("image/jpeg"), fontFile))
-                        .build();
+            Request request = new Request.Builder()
+                    .url(url + "/upload")
+                    .post(requestBody)
+                    .build();
 
-                Request request = new Request.Builder()
-                        .url(url + "/upload")
-                        .post(requestBody)
-                        .build();
-
-                OkHttpClient client = new OkHttpClient();
-                Response response = null;
-                try {
-                    response = client.newCall(request).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                byte[] imageData = new byte[0];
-                try {
-                    assert response != null;
-                    imageData = response.body().bytes();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                inputStream = new ByteArrayInputStream(imageData);
-            });
-            sendGenerationRequest.start();
+            OkHttpClient client = new OkHttpClient();
+            Response response = null;
             try {
-                sendGenerationRequest.join();
-            } catch (InterruptedException e) {
+                response = client.newCall(request).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            Bitmap gotImage = BitmapFactory.decodeStream(inputStream);
-            int finalNumberRows = numberRows;
-            System.out.println(numberRows);
-            Thread thread = new Thread(() -> {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                gotImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] bitmapData = stream.toByteArray();
-                ImageData imageData = ImageDataFactory.create(bitmapData);
-                canvas.addImage(imageData, 0, currentHeight - 64 * (finalNumberRows + 1), gotImage.getWidth(), false);
-            });
-            thread.start();
+
+            byte[] imageData = new byte[0];
             try {
-                thread.join();
-            } catch (InterruptedException e) {
+                assert response != null;
+                imageData = response.body().bytes();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            ++numberRows;
-            TextView fileNameTextView = findViewById(R.id.fileName);
-            fileNameTextView.setText(fileName);
-            PDFView pdfView = findViewById(R.id.pdfView);
-            pdfView.setMinimumHeight((int) (1.4141 * pdfView.getWidth()));
-            pdfView.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName))
-                    .fitEachPage(true)
-                    .load();
+
+            inputStream = new ByteArrayInputStream(imageData);
+        });
+        sendGenerationRequest.start();
+        try {
+            sendGenerationRequest.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        Bitmap gotImage = BitmapFactory.decodeStream(inputStream);
+        Thread thread = new Thread(() -> {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            gotImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] bitmapData = stream.toByteArray();
+            ImageData imageData = ImageDataFactory.create(bitmapData);
+            canvas.addImage(imageData, 0, gotImage.getHeight(), gotImage.getWidth(), false);
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        TextView fileNameTextView = findViewById(R.id.fileName);
+        fileNameTextView.setText(fileName);
+        PDFView pdfView = findViewById(R.id.pdfView);
+        pdfView.setMinimumHeight((int) (1.4141 * pdfView.getWidth()));
+        pdfView.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName))
+                .fitEachPage(true)
+                .load();
+
         document.close();
 
         ImageButton remove = findViewById(R.id.removeFile);
